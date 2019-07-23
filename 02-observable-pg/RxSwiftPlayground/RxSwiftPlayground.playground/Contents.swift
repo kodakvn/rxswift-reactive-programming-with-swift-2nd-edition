@@ -3,62 +3,111 @@ import RxSwift
 
 // ### Creating and subscribing to observables ###
 
+//example(of: "just, of, from") {
+//    // 1
+//    let one = 1
+//    let two = 2
+//    let three = 3
 //
-example(of: "just, of, from") {
+//    // 2
+//    let observable: Observable<Int> = Observable<Int>.just(one)
+//    let observable2 = Observable.of(one, two, three)
+//    let observable3 = Observable.of([one, two, three])
+//    let observable4 = Observable.from([one, two, three])
+//}
+//
+//example(of: "subscribe") {
+//    // 1
+//    let one = 1
+//    let two = 2
+//    let three = 3
+//
+//    // 2
+//    let observable = Observable.of(one, two, three)
+//    observable.subscribe(onNext: { element in
+//        print(element)
+//    })
+//}
+//
+//example(of: "empty") {
+//    let observable = Observable<Void>.empty()
+//    observable.subscribe(onNext: { element in // 1
+//        print(element)
+//    }, onCompleted: { // 2
+//        print("completed")
+//    })
+//}
+//
+//example(of: "never") {
+//    let observable = Observable<Any>.never()
+//
+//    observable.subscribe(onNext: { element in // 1
+//        print(element)
+//    }, onCompleted: { // 2
+//        print("completed")
+//    })
+//}
+//
+//example(of: "range") {
+//    // 1
+//    let observable = Observable<Int>.range(start: 1, count: 10)
+//
+//    // 2
+//    observable.subscribe(onNext: { i in
+//        let n = Double(i)
+//        let fibonacci = Int(((pow(1.61803, n) - pow(0.61803, n)) / 2.23606).rounded())
+//        print(fibonacci)
+//    })
+//}
+
+// ### Disposing and terminating
+
+example(of: "dispose") {
     // 1
-    let one = 1
-    let two = 2
-    let three = 3
+    let observable = Observable.of("A", "B", "C")
     
     // 2
-    let observable: Observable<Int> = Observable<Int>.just(one)
-    let observable2 = Observable.of(one, two, three)
-    let observable3 = Observable.of([one, two, three])
-    let observable4 = Observable.from([one, two, three])
-}
-
-example(of: "subscribe") {
-    // 1
-    let one = 1
-    let two = 2
-    let three = 3
-
-    // 2
-    let observable = Observable.of(one, two, three)
-    observable.subscribe(onNext: { element in
-        print(element)
-    })
-}
-
-example(of: "empty") {
-    let observable = Observable<Void>.empty()
-    observable.subscribe(onNext: { element in // 1
-        print(element)
-    }, onCompleted: { // 2
-        print("completed")
-    })
-}
-
-example(of: "never") {
-    let observable = Observable<Any>.never()
+    let subscription = observable.subscribe { event in
+        // 3
+        print(event)
+    }
     
-    observable.subscribe(onNext: { element in // 1
-        print(element)
-    }, onCompleted: { // 2
-        print("completed")
-    })
+    subscription.dispose()
 }
 
-example(of: "range") {
+example(of: "DisposeBag") {
     // 1
-    let observable = Observable<Int>.range(start: 1, count: 10)
+    let disposeBag = DisposeBag()
     
     // 2
-    observable.subscribe(onNext: { i in
-        let n = Double(i)
-        let fibonacci = Int(((pow(1.61803, n) - pow(0.61803, n)) / 2.23606).rounded())
-        print(fibonacci)
-    })
+    Observable.of("A", "B", "C")
+        .subscribe {
+            print($0)
+        }
+        .disposed(by: disposeBag)
+}
+
+example(of: "create") {
+    enum MyError: Error {
+        case anError
+    }
+    
+    let disposeBag = DisposeBag()
+    
+    Observable<String>.create { observer in
+            observer.onNext("1")
+//            observer.onError(MyError.anError)
+//            observer.onCompleted()
+            observer.onNext("?")
+            return Disposables.create()
+        }
+        .subscribe(
+            onNext: { print($0) },
+            onError: { print($0) },
+            onCompleted: { print("completed") },
+            onDisposed: { print("disposed") }
+        )
+//        .disposed(by: disposeBag)
 }
 /*:
  Copyright (c) 2014-2017 Razeware LLC
