@@ -38,15 +38,14 @@ import RxSwift
 //    })
 //}
 //
-//example(of: "never") {
-//    let observable = Observable<Any>.never()
-//
-//    observable.subscribe(onNext: { element in // 1
-//        print(element)
-//    }, onCompleted: { // 2
-//        print("completed")
-//    })
-//}
+example(of: "never") {
+    let observable = Observable<Any>.never()
+
+    observable.subscribe(onNext: { print("onNext \($0)") },
+                         onError: { print("onError \($0)") },
+                         onCompleted: { print("onCompleted") },
+                         onDisposed: { print("onDisposed") })
+}
 //
 //example(of: "range") {
 //    // 1
@@ -112,85 +111,85 @@ import RxSwift
 
 // ### Creating observable factories ###
 
-example(of: "deferred") {
-    let disposeBag = DisposeBag()
-    
-    // 1
-    var flip = false
-    
-    // 2
-    let factory: Observable<Int> = Observable.deferred {
-        // 3
-        flip = !flip
-        
-        // 4
-        if flip {
-            return Observable.of(1,2,3)
-        } else {
-            return Observable.of(4,5,6)
-        }
-    }
-    
-    for _ in 0...3 {
-        factory.subscribe(onNext: {
-            print($0, terminator: "")
-        })
-        .disposed(by: disposeBag)
-        
-        print()
-    }
-}
+//example(of: "deferred") {
+//    let disposeBag = DisposeBag()
+//
+//    // 1
+//    var flip = false
+//
+//    // 2
+//    let factory: Observable<Int> = Observable.deferred {
+//        // 3
+//        flip = !flip
+//
+//        // 4
+//        if flip {
+//            return Observable.of(1,2,3)
+//        } else {
+//            return Observable.of(4,5,6)
+//        }
+//    }
+//
+//    for _ in 0...3 {
+//        factory.subscribe(onNext: {
+//            print($0, terminator: "")
+//        })
+//        .disposed(by: disposeBag)
+//
+//        print()
+//    }
+//}
 
-example(of: "Single") {
-    // 1
-    let disposeBag = DisposeBag()
-    
-    // 2
-    enum FileReadError: Error {
-        case fileNotFound, unreadable, encodingFailed
-    }
-    
-    // 3
-    func loadText(from name: String) -> Single<String> {
-        return Single.create { single in
-            // 1
-            let disposable = Disposables.create()
-            
-            // 2
-            guard let path = Bundle.main.path(forResource: name, ofType: "txt") else {
-                single(.error(FileReadError.fileNotFound))
-                return disposable
-            }
-            
-            // 3
-            guard let data = FileManager.default.contents(atPath: path) else {
-                single(.error(FileReadError.unreadable))
-                return disposable
-            }
-            
-            // 4
-            guard let contents = String(data: data, encoding: .utf8) else {
-                single(.error(FileReadError.encodingFailed))
-                return disposable
-            }
-            
-            // 5
-            single(.success(contents))
-            return disposable
-        }
-    }
-    
-    loadText(from: "Copyright")
-        .subscribe {
-            switch $0 {
-            case .success(let string):
-                print(string)
-            case .error(let error):
-                print(error)
-            }
-        }
-        .disposed(by: disposeBag)
-}
+//example(of: "Single") {
+//    // 1
+//    let disposeBag = DisposeBag()
+//
+//    // 2
+//    enum FileReadError: Error {
+//        case fileNotFound, unreadable, encodingFailed
+//    }
+//
+//    // 3
+//    func loadText(from name: String) -> Single<String> {
+//        return Single.create { single in
+//            // 1
+//            let disposable = Disposables.create()
+//
+//            // 2
+//            guard let path = Bundle.main.path(forResource: name, ofType: "txt") else {
+//                single(.error(FileReadError.fileNotFound))
+//                return disposable
+//            }
+//
+//            // 3
+//            guard let data = FileManager.default.contents(atPath: path) else {
+//                single(.error(FileReadError.unreadable))
+//                return disposable
+//            }
+//
+//            // 4
+//            guard let contents = String(data: data, encoding: .utf8) else {
+//                single(.error(FileReadError.encodingFailed))
+//                return disposable
+//            }
+//
+//            // 5
+//            single(.success(contents))
+//            return disposable
+//        }
+//    }
+//
+//    loadText(from: "Copyright")
+//        .subscribe {
+//            switch $0 {
+//            case .success(let string):
+//                print(string)
+//            case .error(let error):
+//                print(error)
+//            }
+//        }
+//        .disposed(by: disposeBag)
+//}
 /*:
  Copyright (c) 2014-2017 Razeware LLC
  
