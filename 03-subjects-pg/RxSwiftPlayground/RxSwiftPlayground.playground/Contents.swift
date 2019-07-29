@@ -4,38 +4,63 @@ import PlaygroundSupport
 
 PlaygroundPage.current.needsIndefiniteExecution = true
 
-example(of: "PublishSubject") {
-    let subject = PublishSubject<String>()
-    
-    let subscription1 = subject
-        .subscribe(onNext: { string in
-            print(string)
-        })
-    
-    subject.on(.next("1"))
-    subject.on(.next("2"))
-    
-    let subscription2 = subject
-        .subscribe { event in
-            print("2)", event.element ?? event)
-        }
-    
-    subject.onNext("3")
-    
-    subscription1.dispose()
-    
-    subject.onNext("4")
-    
-    subject.onCompleted()
-    
-    subject.onNext("5")
-    
-    subscription2.dispose()
-    
+//example(of: "PublishSubject") {
+//    let subject = PublishSubject<String>()
+//
+//    let subscription1 = subject
+//        .subscribe(onNext: { string in
+//            print(string)
+//        })
+//
+//    subject.on(.next("1"))
+//    subject.on(.next("2"))
+//
+//    let subscription2 = subject
+//        .subscribe { event in
+//            print("2)", event.element ?? event)
+//        }
+//
+//    subject.onNext("3")
+//
+//    subscription1.dispose()
+//
+//    subject.onNext("4")
+//
+//    subject.onCompleted()
+//
+//    subject.onNext("5")
+//
+//    subscription2.dispose()
+//
+//    let disposeBag = DisposeBag()
+//
+//    subject.subscribe {
+//        print("3)", $0.element ?? $0)
+//    }.disposed(by: disposeBag)
+//}
+
+enum MyError: Error {
+    case anError
+}
+
+func print<T: CustomStringConvertible>(label: String, event: Event<T>) {
+    print(label, event.element ?? event.error ?? event ?? "NULL")
+}
+
+example(of: "BehaviorSubject") {
+    let subject = BehaviorSubject(value: "Initial value")
+    subject.onNext("X")
+
     let disposeBag = DisposeBag()
     
     subject.subscribe {
-        print("3)", $0.element ?? $0)
+        print(label: "1)", event: $0)
+    }.disposed(by: disposeBag)
+    
+    subject.onError(MyError.anError)
+    
+    subject.subscribe {
+        print(label: "2)", event: $0)
     }.disposed(by: disposeBag)
 }
 
