@@ -14,7 +14,29 @@ example(of: "PublishSubject") {
     
     subject.on(.next("1"))
     subject.on(.next("2"))
+    
+    let subscription2 = subject
+        .subscribe { event in
+            print("2)", event.element ?? event)
+        }
+    
     subject.onNext("3")
+    
+    subscription1.dispose()
+    
+    subject.onNext("4")
+    
+    subject.onCompleted()
+    
+    subject.onNext("5")
+    
+    subscription2.dispose()
+    
+    let disposeBag = DisposeBag()
+    
+    subject.subscribe {
+        print("3)", $0.element ?? $0)
+    }.disposed(by: disposeBag)
 }
 
 
