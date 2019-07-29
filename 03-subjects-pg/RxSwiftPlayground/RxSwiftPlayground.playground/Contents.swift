@@ -4,6 +4,18 @@ import PlaygroundSupport
 
 PlaygroundPage.current.needsIndefiniteExecution = true
 
+example(of: "PublishSubject") {
+    let subject = PublishSubject<String>()
+    
+    let subscription1 = subject
+        .subscribe(onNext: { string in
+            print(string)
+        })
+    
+    subject.on(.next("1"))
+    subject.on(.next("2"))
+    subject.onNext("3")
+}
 
 
 /*:
