@@ -47,23 +47,48 @@ func print<T: CustomStringConvertible>(label: String, event: Event<T>) {
     print(label, event.element ?? event.error ?? event ?? "NULL")
 }
 
-example(of: "BehaviorSubject") {
-    let subject = BehaviorSubject(value: "Initial value")
-    subject.onNext("X")
+//example(of: "BehaviorSubject") {
+//    let subject = BehaviorSubject(value: "Initial value")
+//    subject.onNext("X")
+//
+//    let disposeBag = DisposeBag()
+//
+//    subject.subscribe {
+//        print(label: "1)", event: $0)
+//    }.disposed(by: disposeBag)
+//
+//    subject.onError(MyError.anError)
+//
+//    subject.subscribe {
+//        print(label: "2)", event: $0)
+//    }.disposed(by: disposeBag)
+//}
 
+example(of: "ReplaySubject") {
+    let subject = ReplaySubject<String>.create(bufferSize: 2)
+    
     let disposeBag = DisposeBag()
+    
+    subject.onNext("1")
+    subject.onNext("2")
+    subject.onNext("3")
     
     subject.subscribe {
         print(label: "1)", event: $0)
     }.disposed(by: disposeBag)
     
-    subject.onError(MyError.anError)
-    
     subject.subscribe {
         print(label: "2)", event: $0)
     }.disposed(by: disposeBag)
+    
+    subject.onNext("4")
+    subject.onError(MyError.anError)
+    subject.dispose()
+    
+    subject.subscribe {
+        print(label: "3)", event: $0)
+    }.disposed(by: disposeBag)    
 }
-
 
 /*:
  Copyright (c) 2014-2017 Razeware LLC
