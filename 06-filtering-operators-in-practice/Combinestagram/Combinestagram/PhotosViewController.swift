@@ -67,6 +67,7 @@ class PhotosViewController: UICollectionViewController {
         
         authorized
             .distinctUntilChanged()
+            .takeLast(1)
             .filter { !$0 }
             .subscribe(onNext: { [weak self] _ in
                 guard let errorMessage = self?.errorMessage else { return }
@@ -82,11 +83,12 @@ class PhotosViewController: UICollectionViewController {
     
     private func errorMessage() {
         presentAlert(title: "No access to camera roll", message: "You can grant access to Combinestagram from the settings app")
-            .do(onDispose: { [weak self] in
+            .asObservable()
+            .take(5.0, scheduler: MainScheduler.instance)
+            .subscribe(onDisposed: { [weak self] in
                 self?.dismiss(animated: true, completion: nil)
                 _ = self?.navigationController?.popViewController(animated: true)
             })
-            .subscribe()
             .disposed(by: bag)
     }
     

@@ -38,6 +38,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         
         images.asObservable()
+            .throttle(0.5, scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] photos in
                 guard let preview = self?.imagePreview else { return }
                 preview.image = UIImage.collage(images: photos, size: preview.frame.size)
