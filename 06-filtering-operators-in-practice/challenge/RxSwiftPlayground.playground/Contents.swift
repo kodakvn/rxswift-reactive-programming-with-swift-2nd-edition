@@ -28,6 +28,42 @@ example(of: "Challenge 1") {
         return phone
     }
     
+    let convert: (String) -> UInt? = { value in
+        if let number = UInt(value), number < 10 {
+            return number
+        }
+        
+        let keyMap: [String: UInt] = [
+            "abc": 2, "def": 3, "ghi": 4,
+            "jkl": 5, "mno": 6, "pqrs": 7,
+            "tuv": 8, "wxyz": 9
+        ]
+        
+        let converted = keyMap
+            .filter { $0.key.contains(value.lowercased()) }
+            .map { $0.value }
+            .first
+        
+        return converted
+    }
+    
+    let format: ([UInt]) -> String = {
+        var phone = $0.map(String.init).joined()
+        
+        phone.insert("-", at: phone.index(phone.startIndex, offsetBy: 3))
+        phone.insert("-", at: phone.index(phone.startIndex, offsetBy: 7))
+        
+        return phone
+    }
+    
+    let dial: (String) -> String = {
+        if let contact = contacts[$0] {
+            return "Dialing \(contact) \($0)..."
+        } else {
+            return "Contact not found"
+        }
+    }
+    
     let input = PublishSubject<Int>()
     
     // Add your code here
