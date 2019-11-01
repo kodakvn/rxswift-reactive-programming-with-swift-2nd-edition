@@ -29,6 +29,7 @@ class ActivityController: UITableViewController {
     
     private let repo = "ReactiveX/RxSwift"
     
+    private let eventsFileUrl = cachedFileUrl("events.plist")
     private let events = Variable<[Event]>([])
     private let bag = DisposeBag()
     
@@ -43,6 +44,9 @@ class ActivityController: UITableViewController {
         refreshControl.tintColor = UIColor.darkGray
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        
+        let eventsArray = (NSArray(contentsOf: eventsFileUrl)) as? [[String: Any]] ?? []
+        events.value = eventsArray.compactMap(Event.init)
         
         refresh()
     }
@@ -102,6 +106,16 @@ class ActivityController: UITableViewController {
             self.tableView.reloadData()
             self.refreshControl?.endRefreshing()
         }
+        
+        let eventsArray = updatedEvents.map { $0.dictionary } as NSArray
+        eventsArray.write(to: eventsFileUrl, atomically: true)
+    }
+    
+    static func cachedFileUrl(_ fileName: String) -> URL {
+        return FileManager.default
+            .urls(for: .cachesDirectory, in: .allDomainsMask)
+            .first!
+            .appendingPathComponent(fileName)
     }
     
     // MARK: - Table Data Source
