@@ -33,6 +33,16 @@ class CategoriesViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        categories
+            .asObservable()
+            .subscribe(onNext: { [weak self] _ in
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            })
+            .disposed(by: disposeBag)
+
+        
         startDownload()
     }
     
@@ -52,15 +62,6 @@ class CategoriesViewController: UIViewController, UITableViewDataSource, UITable
             .concat(updatedCategories)
             .bind(to: categories)
             .disposed(by: disposeBag)
-
-//        eoCategories
-//            .asObservable()
-//            .subscribe(onNext: { [weak self] _ in
-//                DispatchQueue.main.async {
-//                    self?.tableView.reloadData()
-//                }
-//            })
-//            .disposed(by: disposeBag)
     }
     
     // MARK: UITableViewDataSource
