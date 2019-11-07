@@ -41,7 +41,6 @@ class CategoriesViewController: UIViewController, UITableViewDataSource, UITable
                 }
             })
             .disposed(by: disposeBag)
-
         
         startDownload()
     }
@@ -79,5 +78,15 @@ class CategoriesViewController: UIViewController, UITableViewDataSource, UITable
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let category = categories.value[indexPath.row]
+        if !category.events.isEmpty {
+            let vc = storyboard!.instantiateViewController(withIdentifier: "events") as! EventsViewController
+            vc.title = category.name
+            vc.events.value = category.events
+            navigationController!.pushViewController(vc, animated: true)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
