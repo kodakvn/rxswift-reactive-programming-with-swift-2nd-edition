@@ -31,6 +31,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var humidityLabel: UILabel!
     @IBOutlet weak var iconLabel: UILabel!
     @IBOutlet weak var cityNameLabel: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     let bag = DisposeBag()
     
     override func viewDidLoad() {
@@ -39,20 +40,14 @@ class ViewController: UIViewController {
         
         style()
         
-        ApiController.shared.currentWeather(city: "RxSwift")
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { data in
-                self.tempLabel.text = "\(data.temperature)° C"
-                self.iconLabel.text = data.icon
-                self.humidityLabel.text = "\(data.humidity)%"
-                self.cityNameLabel.text = data.cityName
-            })
-            .disposed(by: bag)
-        
-        let search = searchCityName.rx.controlEvent(.editingDidEndOnExit).asObservable()
+        let searchInput = searchCityName.rx.controlEvent(.editingDidEndOnExit).asObservable()
             .map { self.searchCityName.text }
+            .filter { ($0 ?? "").count > 0 }
+        
+        let search = searchInput
             .flatMapLatest { text in
                 return ApiController.shared.currentWeather(city: text ?? "Error")
+                    .catchErrorJustReturn(ApiController.Weather.empty)
             }
             .asDriver(onErrorJustReturn: ApiController.Weather.empty)
         
@@ -72,6 +67,35 @@ class ViewController: UIViewController {
             .drive(cityNameLabel.rx.text)
             .disposed(by: bag)
         
+        let running = Observable.from([
+                searchInput.map { _ in true },
+                search.map { _ in false }.asObservable()
+            ])
+            .merge()
+            .throttle(1, scheduler: MainScheduler.instance) // delay for animation ^^
+            .startWith(true)
+            .asDriver(onErrorJustReturn: false)
+        
+        running
+            .skip(1)
+            .drive(activityIndicator.rx.isAnimating)
+            .disposed(by: bag)
+        
+        running
+            .drive(tempLabel.rx.isHidden)
+            .disposed(by: bag)
+        
+        running
+            .drive(iconLabel.rx.isHidden)
+            .disposed(by: bag)
+        
+        running
+            .drive(humidityLabel.rx.isHidden)
+            .disposed(by: bag)
+        
+        running
+            .drive(cityNameLabel.rx.isHidden)
+            .disposed(by: bag)
         
     }
     
