@@ -31,6 +31,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var humidityLabel: UILabel!
     @IBOutlet weak var iconLabel: UILabel!
     @IBOutlet weak var cityNameLabel: UILabel!
+    @IBOutlet weak var tempSwitch: UISwitch!
     let bag = DisposeBag()
     
     override func viewDidLoad() {
@@ -39,24 +40,24 @@ class ViewController: UIViewController {
         
         style()
         
-        ApiController.shared.currentWeather(city: "RxSwift")
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { data in
-                self.tempLabel.text = "\(data.temperature)° C"
-                self.iconLabel.text = data.icon
-                self.humidityLabel.text = "\(data.humidity)%"
-                self.cityNameLabel.text = data.cityName
-            })
-            .disposed(by: bag)
-        
-        let search = searchCityName.rx.controlEvent(.editingDidEndOnExit).asObservable()
+        let textSearch = searchCityName.rx.controlEvent(.editingDidEndOnExit).asObservable()
+        let tempurature = tempSwitch.rx.controlEvent(.valueChanged).asObservable()
+        let search = Observable.from([textSearch, tempurature])
+            .merge()
             .map { self.searchCityName.text }
+            .filter { ($0 ?? "").count > 0 }
             .flatMapLatest { text in
                 return ApiController.shared.currentWeather(city: text ?? "Error")
+                        .catchErrorJustReturn(ApiController.Weather.empty)
             }
             .asDriver(onErrorJustReturn: ApiController.Weather.empty)
         
-        search.map { "\($0.temperature)° C" }
+        search.map { t in
+                if !self.tempSwitch.isOn {
+                    return "\(Int(Double(t.temperature) * 1.8 + 32))° F"
+                }
+                return "\(t.temperature)° C"
+            }
             .drive(tempLabel.rx.text)
             .disposed(by: bag)
         
