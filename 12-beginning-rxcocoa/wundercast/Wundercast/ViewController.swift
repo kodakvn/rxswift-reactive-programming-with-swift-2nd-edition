@@ -46,6 +46,9 @@ class ViewController: UIViewController {
         
         style()
         
+        mapView.rx.setDelegate(self)
+            .disposed(by: bag)
+        
         let searchInput = searchCityName.rx.controlEvent(.editingDidEndOnExit).asObservable()
             .map { self.searchCityName.text }
             .filter { ($0 ?? "").count > 0 }
@@ -137,6 +140,10 @@ class ViewController: UIViewController {
                 self.mapView.isHidden = !self.mapView.isHidden
             })
             .disposed(by: bag)
+        
+        search.map { [$0.overlay()] }
+            .drive(mapView.rx.overlays)
+            .disposed(by: bag)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -167,6 +174,16 @@ class ViewController: UIViewController {
         humidityLabel.textColor = UIColor.cream
         iconLabel.textColor = UIColor.cream
         cityNameLabel.textColor = UIColor.cream
+    }
+}
+
+extension ViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if let overlay = overlay as? ApiController.Weather.Overlay {
+            let overlayView = ApiController.Weather.OverlayView(overlay: overlay, overlayIcon: overlay.icon)
+            return overlayView
+        }
+        return MKOverlayRenderer()
     }
 }
 
