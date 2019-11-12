@@ -152,6 +152,11 @@ class ViewController: UIViewController {
         search.map { [$0.overlay()] }
             .drive(mapView.rx.overlays)
             .disposed(by: bag)
+        
+        textSearch.asDriver(onErrorJustReturn: ApiController.Weather.empty)
+            .map { $0.coordinate }
+            .drive(mapView.rx.location)
+            .disposed(by: bag)
     }
     
     override func viewDidAppear(_ animated: Bool) {
