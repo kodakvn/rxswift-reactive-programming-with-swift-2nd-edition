@@ -77,17 +77,33 @@
                                     <constraint firstAttribute="height" constant="40" id="Zkx-Si-zgr"/>
                                     <constraint firstAttribute="width" constant="40" id="ibw-1x-jT4"/>
                                 </constraints>
+                                <state key="normal" image="ic_map"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GFA-J3-ORU">
+                                <rect key="frame" x="16" y="611" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="Tii-c4-N9U"/>
+                                    <constraint firstAttribute="height" constant="40" id="ioo-iS-ObI"/>
+                                </constraints>
                                 <state key="normal" image="ic_location"/>
                             </button>
+                            <mapView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="cbB-PH-icZ">
+                                <rect key="frame" x="0.0" y="111" width="375" height="492"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="cbB-PH-icZ" secondAttribute="trailing" id="0Le-an-499"/>
+                            <constraint firstItem="cbB-PH-icZ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="17K-bF-LHM"/>
                             <constraint firstItem="jQQ-9b-2rA" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="1Bs-Gm-bwQ"/>
                             <constraint firstItem="jQQ-9b-2rA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="32" id="3EQ-YY-BbS"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="GFA-J3-ORU" secondAttribute="bottom" constant="16" id="5aC-MS-0GS"/>
                             <constraint firstItem="fn5-hY-7os" firstAttribute="width" secondItem="jQQ-9b-2rA" secondAttribute="width" id="6Ay-YA-dE9"/>
+                            <constraint firstItem="UaH-f5-DFU" firstAttribute="top" secondItem="cbB-PH-icZ" secondAttribute="bottom" constant="8" id="AqN-G2-Wea"/>
                             <constraint firstItem="fn5-hY-7os" firstAttribute="centerX" secondItem="jQQ-9b-2rA" secondAttribute="centerX" id="DQs-GR-s4h"/>
                             <constraint firstAttribute="trailing" secondItem="jQQ-9b-2rA" secondAttribute="trailing" constant="32" id="I7g-p4-Sbb"/>
                             <constraint firstItem="x4a-i8-beX" firstAttribute="leading" secondItem="jQQ-9b-2rA" secondAttribute="leading" id="Ice-tx-Qny"/>
+                            <constraint firstItem="GFA-J3-ORU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="JdD-oC-7T0"/>
                             <constraint firstItem="CvG-51-WJq" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="LfL-fC-hE2"/>
                             <constraint firstItem="CvG-51-WJq" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="16" id="LuH-bS-Wr5"/>
                             <constraint firstItem="jQQ-9b-2rA" firstAttribute="top" secondItem="aYm-dp-fOW" secondAttribute="bottom" constant="8" id="MFT-Kh-TpX"/>
@@ -95,6 +111,7 @@
                             <constraint firstItem="jQQ-9b-2rA" firstAttribute="top" secondItem="x4a-i8-beX" secondAttribute="bottom" constant="8" id="VFJ-kt-pMI"/>
                             <constraint firstAttribute="trailing" secondItem="UaH-f5-DFU" secondAttribute="trailing" constant="16" id="aoh-fd-Hso"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="UaH-f5-DFU" secondAttribute="bottom" constant="16" id="eer-l5-HdS"/>
+                            <constraint firstItem="cbB-PH-icZ" firstAttribute="top" secondItem="CvG-51-WJq" secondAttribute="bottom" constant="36" id="hFj-og-HCl"/>
                             <constraint firstItem="FmO-GG-fhe" firstAttribute="centerX" secondItem="CvG-51-WJq" secondAttribute="centerX" id="mdi-LA-CFM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="CvG-51-WJq" secondAttribute="trailing" id="rE1-nx-616"/>
                             <constraint firstItem="jQQ-9b-2rA" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="20" id="ruZ-Hl-zEh"/>
@@ -105,9 +122,11 @@
                     <connections>
                         <outlet property="activityIndicator" destination="FmO-GG-fhe" id="vpD-N2-jtc"/>
                         <outlet property="cityNameLabel" destination="fn5-hY-7os" id="FJD-r9-Dgm"/>
-                        <outlet property="geoLocationButton" destination="UaH-f5-DFU" id="ZSC-l1-WLR"/>
+                        <outlet property="geoLocationButton" destination="GFA-J3-ORU" id="cVJ-3K-lfy"/>
                         <outlet property="humidityLabel" destination="aYm-dp-fOW" id="ACB-jg-cWC"/>
                         <outlet property="iconLabel" destination="jQQ-9b-2rA" id="CFl-ge-t02"/>
+                        <outlet property="mapButton" destination="UaH-f5-DFU" id="V82-OP-AC1"/>
+                        <outlet property="mapView" destination="cbB-PH-icZ" id="AXi-Ui-9GA"/>
                         <outlet property="searchCityName" destination="CvG-51-WJq" id="yXf-Qu-AkM"/>
                         <outlet property="tempLabel" destination="x4a-i8-beX" id="4To-Ng-1e9"/>
                     </connections>
@@ -119,5 +138,6 @@
     </scenes>
     <resources>
         <image name="ic_location" width="40" height="40"/>
+        <image name="ic_map" width="40" height="40"/>
     </resources>
 </document>

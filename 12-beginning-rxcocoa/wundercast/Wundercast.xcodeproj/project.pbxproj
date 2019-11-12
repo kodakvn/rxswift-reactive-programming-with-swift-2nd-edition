@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		678D9AEF237AF7AD002C24DC /* MKMapView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678D9AEE237AF7AD002C24DC /* MKMapView+Rx.swift */; };
 		67CF37B82379B5AD00D7AE77 /* CLLocationManager+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CF37B72379B5AD00D7AE77 /* CLLocationManager+Rx.swift */; };
 		CA64900EFE1D9F43973A260F /* Pods_Wundercast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4098AFCCA291187AB4A1327B /* Pods_Wundercast.framework */; };
 		CB4D69411DE9A7D100DC0488 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4D69401DE9A7D100DC0488 /* AppDelegate.swift */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		4098AFCCA291187AB4A1327B /* Pods_Wundercast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wundercast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		678D9AEE237AF7AD002C24DC /* MKMapView+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MKMapView+Rx.swift"; sourceTree = "<group>"; };
 		67CF37B72379B5AD00D7AE77 /* CLLocationManager+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+Rx.swift"; sourceTree = "<group>"; };
 		8CF08882048DB0620980ACC9 /* Pods-Wundercast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wundercast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Wundercast/Pods-Wundercast.debug.xcconfig"; sourceTree = "<group>"; };
 		A8FEC475BD4840CDBFA8E9B0 /* Pods-Wundercast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wundercast.release.xcconfig"; path = "Pods/Target Support Files/Pods-Wundercast/Pods-Wundercast.release.xcconfig"; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				CB4D696E1DE9C70100DC0488 /* Appearance.swift */,
 				CB4D696F1DE9C70100DC0488 /* Colors.swift */,
 				67CF37B72379B5AD00D7AE77 /* CLLocationManager+Rx.swift */,
+				678D9AEE237AF7AD002C24DC /* MKMapView+Rx.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 				CB4D69431DE9A7D100DC0488 /* ViewController.swift in Sources */,
 				CB4D69711DE9C70100DC0488 /* Colors.swift in Sources */,
 				CB4D69411DE9A7D100DC0488 /* AppDelegate.swift in Sources */,
+				678D9AEF237AF7AD002C24DC /* MKMapView+Rx.swift in Sources */,
 				67CF37B82379B5AD00D7AE77 /* CLLocationManager+Rx.swift in Sources */,
 				CB4D69661DE9AD3300DC0488 /* ApiController.swift in Sources */,
 				CB4D69701DE9C70100DC0488 /* Appearance.swift in Sources */,

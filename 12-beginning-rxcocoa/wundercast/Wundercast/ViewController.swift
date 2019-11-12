@@ -24,6 +24,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import CoreLocation
+import MapKit
 
 class ViewController: UIViewController {
     
@@ -34,6 +35,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var geoLocationButton: UIButton!
+    @IBOutlet weak var mapButton: UIButton!
+    @IBOutlet weak var mapView: MKMapView!
     let bag = DisposeBag()
     let locationManager = CLLocationManager()
     
@@ -127,6 +130,12 @@ class ViewController: UIViewController {
         
         running
             .drive(cityNameLabel.rx.isHidden)
+            .disposed(by: bag)
+        
+        mapButton.rx.tap
+            .subscribe({ _ in
+                self.mapView.isHidden = !self.mapView.isHidden
+            })
             .disposed(by: bag)
     }
     
