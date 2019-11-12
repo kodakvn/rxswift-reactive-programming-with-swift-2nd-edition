@@ -95,10 +95,6 @@ class ViewController: UIViewController {
             .merge()
             .asDriver(onErrorJustReturn: ApiController.Weather.empty)
         
-        let newSearch = Observable.from([textSearch, geoSearch])
-            .merge()
-            .asDriver(onErrorJustReturn: ApiController.Weather.empty)
-        
         search.map { "\($0.temperature)° C" }
             .drive(tempLabel.rx.text)
             .disposed(by: bag)
@@ -156,11 +152,6 @@ class ViewController: UIViewController {
         search.map { [$0.overlay()] }
             .drive(mapView.rx.overlays)
             .disposed(by: bag)
-        
-        newSearch.map { $0.coordinate }
-            .drive(mapView.rx.centerCoordinate)
-            .disposed(by: bag)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
