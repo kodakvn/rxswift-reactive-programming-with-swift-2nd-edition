@@ -49,16 +49,18 @@ class ViewController: UIViewController {
         mapView.rx.setDelegate(self)
             .disposed(by: bag)
         
+        // TEXT
         let searchInput = searchCityName.rx.controlEvent(.editingDidEndOnExit).asObservable()
             .map { self.searchCityName.text }
             .filter { ($0 ?? "").count > 0 }
         
-        locationManager.rx.didUpdateLocations
-            .subscribe(onNext: { locations in
-                print(locations)
-            })
-            .disposed(by: bag)
+        let textSearch = searchInput
+            .flatMapLatest { text in
+                return ApiController.shared.currentWeather(city: text ?? "Error")
+                    .catchErrorJustReturn(ApiController.Weather.empty)
+            }
         
+        // COORDINATE
         let currentLocation = locationManager.rx.didUpdateLocations
             .map { $0[0] }
             .filter { $0.horizontalAccuracy < kCLLocationAccuracyHundredMeters }
@@ -78,13 +80,18 @@ class ViewController: UIViewController {
                     .catchErrorJustReturn(ApiController.Weather.empty)
             }
         
-        let textSearch = searchInput
-            .flatMapLatest { text in
-                return ApiController.shared.currentWeather(city: text ?? "Error")
+        // MAP
+        let mapInput = mapView.rx.regionDidChangeAnimated
+            .skip(1)
+            .map { _ in self.mapView.centerCoordinate }
+        
+        let mapSearch = mapInput.flatMap { coordinate in
+                return ApiController.shared.currentWeather(lat: Float(coordinate.latitude),
+                                                           lon: Float(coordinate.longitude))
                     .catchErrorJustReturn(ApiController.Weather.empty)
             }
         
-        let search = Observable.from([geoSearch, textSearch])
+        let search = Observable.from([textSearch, geoSearch, mapSearch])
             .merge()
             .asDriver(onErrorJustReturn: ApiController.Weather.empty)
         
@@ -107,6 +114,7 @@ class ViewController: UIViewController {
         let running = Observable.from([
                 searchInput.map { _ in true },
                 geoInput.map { _ in true },
+                mapInput.map { _ in true },
                 search.map { _ in false }.asObservable()
             ])
             .merge()
