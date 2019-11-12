@@ -71,6 +71,14 @@
                                     <constraint firstAttribute="height" constant="20" id="axJ-Wo-Hmo"/>
                                 </constraints>
                             </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UaH-f5-DFU">
+                                <rect key="frame" x="319" y="611" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Zkx-Si-zgr"/>
+                                    <constraint firstAttribute="width" constant="40" id="ibw-1x-jT4"/>
+                                </constraints>
+                                <state key="normal" image="ic_location"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -85,6 +93,8 @@
                             <constraint firstItem="jQQ-9b-2rA" firstAttribute="top" secondItem="aYm-dp-fOW" secondAttribute="bottom" constant="8" id="MFT-Kh-TpX"/>
                             <constraint firstItem="fn5-hY-7os" firstAttribute="top" secondItem="jQQ-9b-2rA" secondAttribute="bottom" constant="8" id="Rba-DY-MEe"/>
                             <constraint firstItem="jQQ-9b-2rA" firstAttribute="top" secondItem="x4a-i8-beX" secondAttribute="bottom" constant="8" id="VFJ-kt-pMI"/>
+                            <constraint firstAttribute="trailing" secondItem="UaH-f5-DFU" secondAttribute="trailing" constant="16" id="aoh-fd-Hso"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="UaH-f5-DFU" secondAttribute="bottom" constant="16" id="eer-l5-HdS"/>
                             <constraint firstItem="FmO-GG-fhe" firstAttribute="centerX" secondItem="CvG-51-WJq" secondAttribute="centerX" id="mdi-LA-CFM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="CvG-51-WJq" secondAttribute="trailing" id="rE1-nx-616"/>
                             <constraint firstItem="jQQ-9b-2rA" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="20" id="ruZ-Hl-zEh"/>
@@ -95,6 +105,7 @@
                     <connections>
                         <outlet property="activityIndicator" destination="FmO-GG-fhe" id="vpD-N2-jtc"/>
                         <outlet property="cityNameLabel" destination="fn5-hY-7os" id="FJD-r9-Dgm"/>
+                        <outlet property="geoLocationButton" destination="UaH-f5-DFU" id="ZSC-l1-WLR"/>
                         <outlet property="humidityLabel" destination="aYm-dp-fOW" id="ACB-jg-cWC"/>
                         <outlet property="iconLabel" destination="jQQ-9b-2rA" id="CFl-ge-t02"/>
                         <outlet property="searchCityName" destination="CvG-51-WJq" id="yXf-Qu-AkM"/>
@@ -106,4 +117,7 @@
             <point key="canvasLocation" x="21.600000000000001" y="36.431784107946029"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_location" width="40" height="40"/>
+    </resources>
 </document>
