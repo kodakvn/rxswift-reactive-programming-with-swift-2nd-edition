@@ -92,16 +92,21 @@ class ViewController: UIViewController {
                     if let text = text {
                         self.cache[text] = data
                     }
-                })
-                .retryWhen { e in
-                    return e.enumerated().flatMap { (attempt, error) -> Observable<Int> in
-                        if attempt > self.maxAttempts - 1 {
-                            return Observable.error(error)
-                        }
-                        print("-- retry after \(attempt+1) seconds --")
-                        return Observable<Int>.timer(Double(attempt+1), scheduler: MainScheduler.instance).take(1)
+                }, onError: { [weak self] e in
+                    guard let strongSelf = self else { return }
+                    DispatchQueue.main.async {
+                        strongSelf.showError(error: e)
                     }
-                }
+                })
+//                .retryWhen { e in
+//                    return e.enumerated().flatMap { (attempt, error) -> Observable<Int> in
+//                        if attempt > self.maxAttempts - 1 {
+//                            return Observable.error(error)
+//                        }
+//                        print("-- retry after \(attempt+1) seconds --")
+//                        return Observable<Int>.timer(Double(attempt+1), scheduler: MainScheduler.instance).take(1)
+//                    }
+//                }
                 .catchError { error in
                     if let text = text, let cachedData = self.cache[text] {
                         return Observable.just(cachedData)
@@ -195,5 +200,18 @@ class ViewController: UIViewController {
         humidityLabel.textColor = UIColor.cream
         iconLabel.textColor = UIColor.cream
         cityNameLabel.textColor = UIColor.cream
+    }
+    
+    func showError(error e: Error) {
+        if let e = e as? ApiController.ApiError {
+            switch e {
+            case .cityNotFound:
+                InfoView.showIn(viewController: self, message: "City name is invalid")
+            case .serverFailure:
+                InfoView.showIn(viewController: self, message: "Server error")
+            }
+        } else {
+            InfoView.showIn(viewController: self, message: "An error occurred")
+        }
     }
 }
