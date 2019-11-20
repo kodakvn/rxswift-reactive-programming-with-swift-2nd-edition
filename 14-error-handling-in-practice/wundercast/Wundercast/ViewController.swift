@@ -54,6 +54,8 @@ class ViewController: UIViewController {
         
         style()
         
+        _ = RxReachability.shared.startMonitor("openweathermap.org")
+        
         keyButton.rx.tap.subscribe(onNext: {
             self.requestKey()
         }).disposed(by:bag)
@@ -90,10 +92,19 @@ class ViewController: UIViewController {
             return e.enumerated().flatMap { (attempt, error) -> Observable<Int> in
                 if attempt > self.maxAttempts - 1 {
                     return Observable.error(error)
-                } else if let casted = error as? ApiController.ApiError, casted == .invalidKey {
-                    return ApiController.shared.apiKey
-                        .filter { !$0.isEmpty }
-                        .map { _ in return 1 }
+                } else if let casted = error as? ApiController.ApiError {
+                    switch casted {
+                    case .invalidKey:
+                        return ApiController.shared.apiKey
+                            .filter { !$0.isEmpty }
+                            .map { _ in return 1 }
+                    case .noConnection:
+                        return RxReachability.shared.status
+                            .filter { $0 == .online }
+                            .map { _ in return 1 }
+                    default:
+                        break
+                    }
                 }
                 print("-- retry after \(attempt+1) seconds --")
                 return Observable<Int>.timer(Double(attempt+1), scheduler: MainScheduler.instance).take(1)
@@ -218,6 +229,8 @@ class ViewController: UIViewController {
                 InfoView.showIn(viewController: self, message: "Server error")
             case .invalidKey:
                 InfoView.showIn(viewController: self, message: "Key is invalid")
+            case .noConnection:
+                InfoView.showIn(viewController: self, message: "There is no internet connection")
             }
         } else {
             InfoView.showIn(viewController: self, message: "An error occurred")

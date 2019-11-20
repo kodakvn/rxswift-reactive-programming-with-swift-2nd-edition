@@ -48,6 +48,7 @@ class ApiController {
         case cityNotFound
         case serverFailure
         case invalidKey
+        case noConnection
     }
     
     //MARK: - Api Calls
@@ -120,6 +121,8 @@ class ApiController {
             return session.rx.response(request: request).map { response, data in
                 if 200..<300 ~= response.statusCode {
                     return try! JSON(data: data)
+                } else if response.statusCode < 0 {
+                    throw ApiError.noConnection
                 } else if response.statusCode == 401 {
                     throw ApiError.invalidKey
                 } else if 400..<500 ~= response.statusCode {
