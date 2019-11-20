@@ -47,6 +47,7 @@ class ApiController {
     enum ApiError: Error {
         case cityNotFound
         case serverFailure
+        case invalidKey
     }
     
     //MARK: - Api Calls
@@ -119,6 +120,8 @@ class ApiController {
             return session.rx.response(request: request).map { response, data in
                 if 200..<300 ~= response.statusCode {
                     return try! JSON(data: data)
+                } else if response.statusCode == 401 {
+                    throw ApiError.invalidKey
                 } else if 400..<500 ~= response.statusCode {
                     throw ApiError.cityNotFound
                 } else {
