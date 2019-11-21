@@ -45,6 +45,9 @@ let fruit = Observable<String>.create { observer in
 }
 
 fruit
+    .subscribeOn(globalScheduler)
     .dump()
     .dumpingSubscription()
     .disposed(by: bag)
+
+RunLoop.main.run(until: Date.init(timeIntervalSinceNow: 13))
