@@ -47,6 +47,7 @@ let fruit = Observable<String>.create { observer in
 fruit
     .subscribeOn(globalScheduler)
     .dump()
+    .observeOn(MainScheduler.instance)
     .dumpingSubscription()
     .disposed(by: bag)
 
