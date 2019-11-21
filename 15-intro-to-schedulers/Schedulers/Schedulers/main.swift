@@ -34,3 +34,17 @@ animal
     .dump()
     .dumpingSubscription()
     .disposed(by: bag)
+
+let fruit = Observable<String>.create { observer in
+    observer.onNext("[apple]")
+    sleep(2)
+    observer.onNext("[pineapple]")
+    sleep(2)
+    observer.onNext("[strawberry]")
+    return Disposables.create()
+}
+
+fruit
+    .dump()
+    .dumpingSubscription()
+    .disposed(by: bag)
