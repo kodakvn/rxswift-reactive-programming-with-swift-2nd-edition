@@ -68,4 +68,5 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/screenshots/**/*.jpg
+fastlane/screenshots/**/*.gif
 fastlane/test_output
