@@ -69,4 +69,5 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/screenshots/**/*.jpg
 fastlane/screenshots/**/*.gif
+fastlane/screenshots/**/*.svg
 fastlane/test_output
