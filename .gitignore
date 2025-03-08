@@ -71,4 +71,5 @@ fastlane/screenshots/**/*.jpg
 fastlane/screenshots/**/*.gif
 fastlane/screenshots/**/*.svg
 fastlane/screenshots/**/*.psd
+fastlane/screenshots/**/*.raw
 fastlane/test_output
